@@ -14,7 +14,7 @@ import Marketplace from "./pages/Marketplace";
 import ChatPage from "./pages/ChatPage";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";  
-
+import ForgotPassword from "@/pages/ForgotPassword";
 const queryClient = new QueryClient();
 
 const App = () => (
