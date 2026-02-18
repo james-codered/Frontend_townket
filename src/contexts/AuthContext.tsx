@@ -12,7 +12,7 @@ const login = useCallback(
         },
         body: JSON.stringify({
           email,
-          password,
+          password, 
         }),
       });
 
