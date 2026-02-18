@@ -23,20 +23,21 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route element={<AppLayout />}>
-              <Route path="/" element={<Index />} />
-              <Route path="/marketplace" element={<Marketplace />} />
-              <Route path="/dashboard/entrepreneur" element={<EntrepreneurDashboard />} />
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/admin" element={<AdminPanel />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup/entrepreneur" element={<SignupEntrepreneur />} />
-            <Route path="/signup/customer" element={<SignupCustomer />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+        <BrowserRouter><Routes>
+  <Route element={<AppLayout />}>
+    <Route path="/" element={<Index />} />
+    <Route path="/marketplace" element={<Marketplace />} />
+    <Route path="/dashboard/entrepreneur" element={<EntrepreneurDashboard />} />
+    <Route path="/chat" element={<ChatPage />} />
+    <Route path="/admin" element={<AdminPanel />} />
+  </Route>
+
+  <Route path="/login" element={<Login />} />
+  <Route path="/forgot-password" element={<ForgotPassword />} />   {/* ✅ ADD THIS */}
+  <Route path="/signup/entrepreneur" element={<SignupEntrepreneur />} />
+  <Route path="/signup/customer" element={<SignupCustomer />} />
+  <Route path="*" element={<NotFound />} />
+</Routes>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
