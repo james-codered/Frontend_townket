@@ -1,96 +1,162 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { MapPin, LogIn } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  useEffect,
+} from "react";
 
-const Login = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
+interface User {
+  _id: string;
+  username: string;
+  email: string;
+}
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (
+    username: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
+  logout: () => void;
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+const AuthContext = createContext<AuthContextType | null>(null);
+
+const API_URL = "https://townketbackend.onrender.com";
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // ✅ Load from localStorage on refresh
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    const savedToken = localStorage.getItem("token");
+
+    if (savedUser && savedToken) {
+      setUser(JSON.parse(savedUser));
+      setToken(savedToken);
+    }
+  }, []);
+
+  const login = useCallback(async (email: string, password: string) => {
+    setIsLoading(true);
 
     try {
-      await login(email, password);
-navigate("/dashboard/entrepreneur");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Login failed");
+      }
+
+      const userData = {
+        _id: data._id,
+        username: data.username,
+        email: data.email,
+      };
+
+      setUser(userData);
+      setToken(data.token);
+
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("token", data.token);
+    } catch (error: any) {
+      throw new Error(error?.message || "Something went wrong");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
+  }, []);
+
+  const signup = useCallback(
+    async (username: string, email: string, password: string) => {
+      setIsLoading(true);
+
+      try {
+        const response = await fetch(`${API_URL}/api/auth/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data?.message || "Signup failed");
+        }
+
+        // ✅ Auto login after signup
+        const userData = {
+          _id: data._id,
+          username: data.username,
+          email: data.email,
+        };
+
+        setUser(userData);
+        setToken(data.token);
+
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("token", data.token);
+      } catch (error: any) {
+        throw new Error(error?.message || "Something went wrong");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
+
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 gradient-hero">
-      <div className="card-soft w-full max-w-sm animate-fade-in">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="font-display text-xl font-bold">Townket</span>
-        </div>
-
-        <h1 className="text-xl font-display font-bold">Welcome back</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Log in to your account
-        </p>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">
-              Email
-            </label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1"
-            />
-          </div>
-
-          <div>
-            <label className="text-xs font-medium text-muted-foreground">
-              Password
-            </label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mt-1"
-            />
-          </div>
-
-          {error && <p className="text-xs text-destructive">{error}</p>}
-
-          <Button type="submit" className="w-full gap-2" disabled={loading}>
-            <LogIn className="w-4 h-4" />
-            {loading ? "Logging in..." : "Log In"}
-          </Button>
-        </form>
-
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          Don't have an account?{" "}
-          <Link
-            to="/signup/customer"
-            className="text-foreground font-medium hover:underline"
-          >
-            Sign up
-          </Link>
-        </p>
-      </div>
-    </div>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isAuthenticated: !!user,
+        isLoading,
+        login,
+        signup,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 
-export default Login;
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
+
+  return context;
+};
