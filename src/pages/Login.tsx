@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, LogIn } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,10 +18,15 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    // TODO: Connect to auth API
-    // try { await login(email, password); navigate('/dashboard'); }
-    setError("Backend not connected. Please integrate authentication API.");
-    setLoading(false);
+
+    try {
+      await login(email, password);
+      navigate("/dashboard"); // change later if needed
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,18 +40,39 @@ const Login = () => {
         </div>
 
         <h1 className="text-xl font-display font-bold">Welcome back</h1>
-        <p className="text-sm text-muted-foreground mt-1">Log in to your account</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Log in to your account
+        </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="text-xs font-medium text-muted-foreground">Email</label>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="mt-1" />
+            <label className="text-xs font-medium text-muted-foreground">
+              Email
+            </label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-1"
+            />
           </div>
+
           <div>
-            <label className="text-xs font-medium text-muted-foreground">Password</label>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="mt-1" />
+            <label className="text-xs font-medium text-muted-foreground">
+              Password
+            </label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-1"
+            />
           </div>
+
           {error && <p className="text-xs text-destructive">{error}</p>}
+
           <Button type="submit" className="w-full gap-2" disabled={loading}>
             <LogIn className="w-4 h-4" />
             {loading ? "Logging in..." : "Log In"}
@@ -51,7 +81,12 @@ const Login = () => {
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Don't have an account?{" "}
-          <Link to="/signup/customer" className="text-foreground font-medium hover:underline">Sign up</Link>
+          <Link
+            to="/signup/customer"
+            className="text-foreground font-medium hover:underline"
+          >
+            Sign up
+          </Link>
         </p>
       </div>
     </div>
