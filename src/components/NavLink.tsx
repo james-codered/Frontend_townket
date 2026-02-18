@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface NavLinkCompatProps extends Omit<NavLinkProps, "className"> {
   className?: string;
   activeClassName?: string;
-  pendingClassName?: string;
+  pendingClassName?: string;  
 }
 
 const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
@@ -17,7 +17,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
         className={({ isActive, isPending }) =>
           cn(className, isActive && activeClassName, isPending && pendingClassName)
         }
-        {...props}
+        {...props} 
       />
     );
   },
