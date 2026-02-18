@@ -30,23 +30,67 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isLoading: false,
   });
 
-  const login = useCallback(async (_email: string, _password: string) => {
-    setState((s) => ({ ...s, isLoading: true }));
-    // TODO: Replace with real API call
-    // const res = await fetch(`${API_URL}/auth/login`, { method: 'POST', body: JSON.stringify({ email, password }) });
-    // const data = await res.json();
-    // setState({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
-    setState((s) => ({ ...s, isLoading: false }));
-    throw new Error("Backend not connected. Please connect to a real authentication API.");
-  }, []);
+  const login = useCallback(async (email: string, password: string) => {
+  setState((s) => ({ ...s, isLoading: true }));
 
-  const signup = useCallback(async (_name: string, _email: string, _password: string, _role: UserRole) => {
-    setState((s) => ({ ...s, isLoading: true }));
-    // TODO: Replace with real API call
-    setState((s) => ({ ...s, isLoading: false }));
-    throw new Error("Backend not connected. Please connect to a real authentication API.");
-  }, []);
+  try {
+    const res = await fetch("https://townketbackend.onrender.com/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Login failed");
+    }
+
+    setState({
+      user: data.user,
+      token: data.token,
+      isAuthenticated: true,
+      isLoading: false,
+    });
+
+  } catch (error: any) {
+    setState((s) => ({ ...s, isLoading: false }));
+    throw new Error(error.message);
+  }
+}, []);
+
+  const signup = useCallback(async (name: string, email: string, password: string, role: UserRole) => {
+  setState((s) => ({ ...s, isLoading: true }));
+
+  try {
+    const res = await fetch("https://townketbackend.onrender.com/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password, role }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Signup failed");
+    }
+
+    setState({
+      user: data.user,
+      token: data.token,
+      isAuthenticated: true,
+      isLoading: false,
+    });
+
+  } catch (error: any) {
+    setState((s) => ({ ...s, isLoading: false }));
+    throw new Error(error.message);
+  }
+}, []);
   const logout = useCallback(() => {
     setState({ user: null, token: null, isAuthenticated: false, isLoading: false });
     // TODO: Clear token from storage, call logout endpoint
