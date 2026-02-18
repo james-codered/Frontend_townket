@@ -1,162 +1,87 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  ReactNode,
-  useEffect,
-} from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/AuthContext";
 
-interface User {
-  _id: string;
-  username: string;
-  email: string;
-}
+const Login = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (
-    username: string,
-    email: string,
-    password: string
-  ) => Promise<void>;
-  logout: () => void;
-}
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // ✅ correct place
+  const [error, setError] = useState("");
 
-const AuthContext = createContext<AuthContextType | null>(null);
-
-const API_URL = "https://townketbackend.onrender.com";
-
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // ✅ Load from localStorage on refresh
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    const savedToken = localStorage.getItem("token");
-
-    if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
-      setToken(savedToken);
-    }
-  }, []);
-
-  const login = useCallback(async (email: string, password: string) => {
-    setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data?.message || "Login failed");
-      }
-
-      const userData = {
-        _id: data._id,
-        username: data.username,
-        email: data.email,
-      };
-
-      setUser(userData);
-      setToken(data.token);
-
-      localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("token", data.token);
-    } catch (error: any) {
-      throw new Error(error?.message || "Something went wrong");
-    } finally {
-      setIsLoading(false);
+      await login(email, password);
+      navigate("/market"); // your new route
+    } catch (err: any) {
+      setError(err.message || "Login failed");
     }
-  }, []);
-
-  const signup = useCallback(
-    async (username: string, email: string, password: string) => {
-      setIsLoading(true);
-
-      try {
-        const response = await fetch(`${API_URL}/api/auth/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data?.message || "Signup failed");
-        }
-
-        // ✅ Auto login after signup
-        const userData = {
-          _id: data._id,
-          username: data.username,
-          email: data.email,
-        };
-
-        setUser(userData);
-        setToken(data.token);
-
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", data.token);
-      } catch (error: any) {
-        throw new Error(error?.message || "Something went wrong");
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
-
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        isAuthenticated: !!user,
-        isLoading,
-        login,
-        signup,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-sm">
+        <h1 className="text-xl font-bold">Welcome Back</h1>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          {/* Email */}
+          <div>
+            <label>Email</label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <div className="flex justify-between">
+              <label>Password</label>
+              <Link
+                to="/forgot-password"
+                className="text-xs text-blue-600 hover:underline"
+              >
+                Forgot?
+              </Link>
+            </div>
+
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="pr-12"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2 text-xs text-gray-500"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+
+          {error && <p className="text-red-500 text-xs">{error}</p>}
+
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
-  }
-
-  return context;
-};
+export default Login;
