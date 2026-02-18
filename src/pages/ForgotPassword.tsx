@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -8,6 +6,7 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage("");
 
     try {
       const response = await fetch(
@@ -22,6 +21,9 @@ const ForgotPassword = () => {
       );
 
       const data = await response.json();
+
+      console.log("SERVER RESPONSE:", data);
+
       setMessage(data.message);
     } catch (error) {
       setMessage("Something went wrong");
@@ -31,27 +33,33 @@ const ForgotPassword = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-sm">
-        <h1 className="text-xl font-bold">Forgot Password</h1>
+        <h1 className="text-xl font-bold mb-6">Forgot Password</h1>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label>Email</label>
-            <Input
+            <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="w-full border p-2 rounded"
             />
           </div>
 
-          <Button type="submit" className="w-full">
+          <button
+            type="submit"
+            className="w-full bg-black text-white py-2 rounded"
+          >
             Send Reset Link
-          </Button>
-        </form>
+          </button>
 
-        {message && (
-          <p className="text-sm text-center mt-4">{message}</p>
-        )}
+          {message && (
+            <p className="text-green-600 text-sm text-center">
+              {message}
+            </p>
+          )}
+        </form>
       </div>
     </div>
   );
