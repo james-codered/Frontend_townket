@@ -13,7 +13,7 @@ import EntrepreneurDashboard from "./pages/EntrepreneurDashboard";
 import Marketplace from "./pages/Marketplace";
 import ChatPage from "./pages/ChatPage";
 import AdminPanel from "./pages/AdminPanel";
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound";  
 
 const queryClient = new QueryClient();
 
