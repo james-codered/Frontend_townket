@@ -16,6 +16,7 @@ import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";  
 import ForgotPassword from "@/pages/ForgotPassword";
 const queryClient = new QueryClient();
+import ResetPassword from "@/pages/ResetPassword";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -37,6 +38,7 @@ const App = () => (
   <Route path="/signup/entrepreneur" element={<SignupEntrepreneur />} />
   <Route path="/signup/customer" element={<SignupCustomer />} />
   <Route path="*" element={<NotFound />} />
+  <Route path="/reset-password/:token" element={<ResetPassword />} /> 
 </Routes>
         </BrowserRouter>
       </TooltipProvider>
