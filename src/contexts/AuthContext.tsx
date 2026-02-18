@@ -1,66 +1,80 @@
-const login = useCallback(async (email: string, password: string) => {
-  setState((s) => ({ ...s, isLoading: true }));
+const API_URL = "https://townketbackend.onrender.com";
 
-  try {
-    const res = await fetch("https://townketbackend.onrender.com/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+const login = useCallback(
+  async (email: string, password: string) => {
+    setState((prev) => ({ ...prev, isLoading: true }));
 
-    const data = await res.json();
+    try {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-    if (!res.ok) {
-      throw new Error(data.message || "Login failed");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Login failed");
+      }
+
+      setState({
+        user: data.user,
+        token: data.token,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error: any) {
+      setState((prev) => ({ ...prev, isLoading: false }));
+      throw new Error(error?.message || "Something went wrong");
     }
+  },
+  []
+);
 
-    setState({
-      user: data.user,
-      token: data.token,
-      isAuthenticated: true,
-      isLoading: false,
-    });
+const signup = useCallback(
+  async (
+    name: string,
+    email: string,
+    password: string,
+    role: UserRole
+  ) => {
+    setState((prev) => ({ ...prev, isLoading: true }));
 
-  } catch (error: any) {
-    setState((s) => ({ ...s, isLoading: false }));
-    throw new Error(error.message);
-  }
-}, []);
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: name,
+          email,
+          password,
+          role,
+        }),
+      });
 
-const signup = useCallback(async (
-  name: string,
-  email: string,
-  password: string,
-  role: UserRole
-) => {
-  setState((s) => ({ ...s, isLoading: true }));
+      const data = await response.json();
 
-  try {
-    const res = await fetch("https://townketbackend.onrender.com/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username: name, email, password, role }),
-    });
+      if (!response.ok) {
+        throw new Error(data?.message || "Signup failed");
+      }
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Signup failed");
+      setState({
+        user: data.user,
+        token: data.token,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error: any) {
+      setState((prev) => ({ ...prev, isLoading: false }));
+      throw new Error(error?.message || "Something went wrong");
     }
-
-    setState({
-      user: data.user,
-      token: data.token,
-      isAuthenticated: true,
-      isLoading: false,
-    });
-
-  } catch (error: any) {
-    setState((s) => ({ ...s, isLoading: false }));
-    throw new Error(error.message);
-  }
-}, []);
+  },
+  []
+);
