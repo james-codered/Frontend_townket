@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -9,8 +9,23 @@ const ForgotPassword = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // For now just simulate success
-    setMessage("If this email exists, a reset link has been sent.");
+    try {
+      const response = await fetch(
+        "https://townketbackend.onrender.com/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+      setMessage(data.message);
+    } catch (error) {
+      setMessage("Something went wrong");
+    }
   };
 
   return (
@@ -32,11 +47,11 @@ const ForgotPassword = () => {
           <Button type="submit" className="w-full">
             Send Reset Link
           </Button>
-
-          {message && (
-            <p className="text-green-600 text-sm mt-2">{message}</p>
-          )}
         </form>
+
+        {message && (
+          <p className="text-sm text-center mt-4">{message}</p>
+        )}
       </div>
     </div>
   );
