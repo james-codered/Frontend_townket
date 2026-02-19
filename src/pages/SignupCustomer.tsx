@@ -105,8 +105,7 @@ const SignupCustomer = () => {
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link
-            to="/login"
+          to="/login/customer"
             className="text-foreground font-medium hover:underline"
           >
             Log in
