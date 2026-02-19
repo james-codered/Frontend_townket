@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 
-const Login = () => {
+const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -28,7 +28,9 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-sm">
-        <h1 className="text-xl font-bold">Welcome Back</h1>
+        <h1 className="text-xl font-display font-bold">
+  Login as {role === "customer" ? "Customer" : "Entrepreneur"}
+</h1>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {/* Email */}
