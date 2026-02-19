@@ -46,40 +46,45 @@ const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
 
           {/* Password */}
           <div>
-            <div className="flex justify-between">
-              <label>Password</label>
-              <Link
-                to="/forgot-password"
-                className="text-xs text-blue-600 hover:underline"
-              >
-                Forgot?
-              </Link>
-            </div>
+<div className="flex justify-between items-center">
+  <label className="text-xs font-medium text-muted-foreground">
+    Password
+  </label>
 
-            <div className="relative">
-              <Input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="pr-12"
-              />
+  <Link
+    to="/forgot-password"
+    className="text-xs text-muted-foreground hover:text-foreground"
+  >
+    Forgot password?
+  </Link>
+</div>
+            <div className="relative mt-1">
+  <Input
+    type={showPassword ? "text" : "password"}
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    required
+    className="pr-16"
+  />
 
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2 text-xs text-gray-500"
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
+  <button
+    type="button"
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground"
+  >
+    {showPassword ? "Hide" : "Show"}
+  </button>
+</div>
+       
+              
             </div>
           </div>
 
           {error && <p className="text-red-500 text-xs">{error}</p>}
 
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
+          <Button type="submit" className="w-full gap-2" disabled={loading}>
+         {loading ? "Logging in..." : "Login"}
+       </Button>
         </form>
       </div>
     </div>
