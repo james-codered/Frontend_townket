@@ -31,6 +31,9 @@ const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
         <h1 className="text-xl font-display font-bold">
   Login as {role === "customer" ? "Customer" : "Entrepreneur"}
 </h1>
+        <p className="text-sm text-muted-foreground mt-1">
+  Access your Townket account
+</p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {/* Email */}
