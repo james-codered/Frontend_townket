@@ -32,8 +32,9 @@ const App = () => (
     <Route path="/chat" element={<ChatPage />} />
     <Route path="/admin" element={<AdminPanel />} />
   </Route>
-
-  <Route path="/login" element={<Login />} />
+          
+<Route path="/login/customer" element={<Login role="customer" />} />
+<Route path="/login/entrepreneur" element={<Login role="entrepreneur" />} />
   <Route path="/forgot-password" element={<ForgotPassword />} />   {/* ✅ ADD THIS */}
   <Route path="/signup/entrepreneur" element={<SignupEntrepreneur />} />
   <Route path="/signup/customer" element={<SignupCustomer />} />
