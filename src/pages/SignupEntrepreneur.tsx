@@ -93,17 +93,28 @@ const SignupEntrepreneur = () => {
           </div>
 
           <div>
-          <label className="text-xs font-medium text-muted-foreground">
-          Password
-           </label>
-            <Input
-             type="password"
-             value={password}
-             onChange={(e) => setPassword(e.target.value)}
-             required
-              className="mt-1"
-             />
-            </div>
+  <label className="text-xs font-medium text-muted-foreground">
+    Password
+  </label>
+
+  <div className="relative mt-1">
+    <Input
+      type={showPassword ? "text" : "password"}
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      required
+      className="pr-16"
+    />
+
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground"
+    >
+      {showPassword ? "Hide" : "Show"}
+    </button>
+    </div>
+  </div>
           {error && (
             <p className="text-xs text-destructive">{error}</p>
           )}
