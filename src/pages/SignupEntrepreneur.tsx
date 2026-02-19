@@ -14,6 +14,7 @@ const SignupEntrepreneur = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,18 +93,17 @@ const SignupEntrepreneur = () => {
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
-              Password
-            </label>
+          <label className="text-xs font-medium text-muted-foreground">
+          Password
+           </label>
             <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+             type="password"
+             value={password}
+             onChange={(e) => setPassword(e.target.value)}
+             required
               className="mt-1"
-            />
-          </div>
-
+             />
+            </div>
           {error && (
             <p className="text-xs text-destructive">{error}</p>
           )}
