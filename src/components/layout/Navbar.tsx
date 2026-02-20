@@ -20,8 +20,9 @@ const Navbar = () => {
         <Link to="/" className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
             <MapPin className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <span className="font-display text-xl font-bold text-foreground">Townket</span>
+          <span className="font-display text-xl font-bold text-foreground">
+  CampusPrenue
+</span>
         </Link>
 
         {/* Desktop */}
