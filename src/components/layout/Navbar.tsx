@@ -1,5 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { GraduationCap, Menu, X, ShoppingBag, MessageCircle, User } from "lucide-react";
+import {
+  GraduationCap,
+  Menu,
+  X,
+  ShoppingBag,
+  MessageCircle,
+  User,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -12,21 +19,26 @@ const Navbar = () => {
     { to: "/chat", label: "Chat", icon: MessageCircle },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  // Better active checker (supports sub routes like /marketplace/123)
+  const isActive = (path: string) =>
+    location.pathname.startsWith(path);
 
   return (
     <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
+        
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
             <GraduationCap className="w-5 h-5 text-primary-foreground" />
+          </div>
           <span className="font-display text-xl font-bold text-foreground">
-  CampusPrenue
-</span>
+            CampusPrenue
+          </span>
         </Link>
 
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-1">
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-2">
           {navLinks.map((link) => (
             <Link key={link.to} to={link.to}>
               <Button
@@ -41,6 +53,7 @@ const Navbar = () => {
           ))}
         </div>
 
+        {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-2">
           <Link to="/login">
             <Button variant="ghost" size="sm" className="gap-2">
@@ -48,42 +61,63 @@ const Navbar = () => {
               Login
             </Button>
           </Link>
+
           <Link to="/signup/customer">
             <Button size="sm">Get Started</Button>
           </Link>
         </div>
 
-        {/* Mobile toggle */}
+        {/* Mobile Toggle */}
         <Button
           variant="ghost"
           size="icon"
           className="md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileOpen ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
         </Button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-card p-4 animate-fade-in">
-          <div className="flex flex-col gap-2">
+        <div className="md:hidden border-t border-border bg-card p-4">
+          <div className="flex flex-col gap-3">
             {navLinks.map((link) => (
-              <Link key={link.to} to={link.to} onClick={() => setMobileOpen(false)}>
-                <Button variant={isActive(link.to) ? "default" : "ghost"} className="w-full justify-start gap-2">
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMobileOpen(false)}
+              >
+                <Button
+                  variant={isActive(link.to) ? "default" : "ghost"}
+                  className="w-full justify-start gap-2"
+                >
                   <link.icon className="w-4 h-4" />
                   {link.label}
                 </Button>
               </Link>
             ))}
+
             <hr className="border-border my-2" />
+
             <Link to="/login" onClick={() => setMobileOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start gap-2">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-2"
+              >
                 <User className="w-4 h-4" />
                 Login
               </Button>
             </Link>
-            <Link to="/signup/customer" onClick={() => setMobileOpen(false)}>
+
+            <Link
+              to="/signup/customer"
+              onClick={() => setMobileOpen(false)}
+            >
               <Button className="w-full">Get Started</Button>
             </Link>
           </div>
