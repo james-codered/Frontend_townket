@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { MapPin, Menu, X, ShoppingBag, MessageCircle, User } from "lucide-react";
+import { GraduationCap, Menu, X, ShoppingBag, MessageCircle, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -19,7 +19,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <Link to="/" className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-primary-foreground" />
+            <GraduationCap className="w-5 h-5 text-primary-foreground" />
           <span className="font-display text-xl font-bold text-foreground">
   CampusPrenue
 </span>
