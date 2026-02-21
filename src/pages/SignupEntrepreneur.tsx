@@ -36,6 +36,13 @@ const SignupEntrepreneur = () => {
     <div className="min-h-screen flex items-center justify-center px-4 gradient-hero">
       <div className="card-soft w-full max-w-sm animate-fade-in">
         <div className="flex items-center gap-2 mb-6">
+  <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
+    <MapPin className="w-5 h-5 text-primary-foreground" />
+  </div>
+  <span className="font-display text-xl font-bold">
+    CampusPrenue
+  </span>
+</div>   // ← THIS must exist
           <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
             <MapPin className="w-5 h-5 text-primary-foreground" />
           </div>
