@@ -24,43 +24,41 @@ const SignupEntrepreneur = () => {
     try {
       await signup(name, email, password, "entrepreneur");
     } catch (err: any) {
-      setError(err?.message || "Signup failed");
+      setError(err.message || "Signup failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 gradient-hero">
-      <div className="card-soft w-full max-w-sm animate-fade-in">
-        
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+
         {/* Logo */}
         <div className="flex items-center gap-2 mb-6">
-          <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-primary-foreground" />
+          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+            <MapPin className="w-5 h-5 text-white" />
           </div>
-          <span className="font-display text-xl font-bold">
-            CampusPrenue
-          </span>
+          <span className="font-bold text-xl">CampusPrenue</span>
         </div>
 
-        {/* Badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/30 text-xs font-medium mb-4">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 text-xs font-medium mb-4">
           <Store className="w-3 h-3" />
           Entrepreneur Account
         </div>
 
-        <h1 className="text-xl font-display font-bold">
+        <h1 className="text-xl font-bold">
           Create your business
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">
+
+        <p className="text-sm text-gray-500 mt-1">
           Start selling to your local community
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          
+
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-xs font-medium">
               Full Name
             </label>
             <Input
@@ -72,7 +70,7 @@ const SignupEntrepreneur = () => {
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-xs font-medium">
               Business Name
             </label>
             <Input
@@ -84,7 +82,7 @@ const SignupEntrepreneur = () => {
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-xs font-medium">
               Email
             </label>
             <Input
@@ -97,7 +95,7 @@ const SignupEntrepreneur = () => {
           </div>
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground">
+            <label className="text-xs font-medium">
               Password
             </label>
 
@@ -113,7 +111,7 @@ const SignupEntrepreneur = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
@@ -121,31 +119,24 @@ const SignupEntrepreneur = () => {
           </div>
 
           {error && (
-            <p className="text-xs text-destructive">{error}</p>
+            <p className="text-red-500 text-xs">{error}</p>
           )}
 
-          <Button type="submit" className="w-full gap-2" disabled={loading}>
-            <UserPlus className="w-4 h-4" />
+          <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Creating..." : "Create Account"}
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-muted-foreground">
+        <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <Link
-            to="/login/entrepreneur"
-            className="text-foreground font-medium hover:underline"
-          >
+          <Link to="/login/entrepreneur" className="font-medium underline">
             Log in
           </Link>
         </p>
 
-        <p className="text-center text-xs text-muted-foreground mt-2">
+        <p className="text-center text-xs text-gray-500 mt-2">
           Looking to buy?{" "}
-          <Link
-            to="/signup/customer"
-            className="text-foreground font-medium hover:underline"
-          >
+          <Link to="/signup/customer" className="font-medium underline">
             Sign up as customer
           </Link>
         </p>
