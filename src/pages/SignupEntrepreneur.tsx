@@ -34,7 +34,6 @@ const SignupEntrepreneur = () => {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
 
-        {/* Logo */}
         <div className="flex items-center gap-2 mb-6">
           <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
             <MapPin className="w-5 h-5 text-white" />
@@ -123,8 +122,10 @@ const SignupEntrepreneur = () => {
           )}
 
           <Button type="submit" className="w-full" disabled={loading}>
+            <UserPlus className="w-4 h-4 mr-2" />
             {loading ? "Creating..." : "Create Account"}
           </Button>
+
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-500">
