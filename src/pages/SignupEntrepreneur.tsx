@@ -24,7 +24,7 @@ const SignupEntrepreneur = () => {
     try {
       await signup(name, email, password, "entrepreneur");
     } catch (err: any) {
-      setError(err.message || "Signup failed");
+      setError(err?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -33,7 +33,7 @@ const SignupEntrepreneur = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 gradient-hero">
       <div className="card-soft w-full max-w-sm animate-fade-in">
-
+        
         {/* Logo */}
         <div className="flex items-center gap-2 mb-6">
           <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
@@ -58,7 +58,7 @@ const SignupEntrepreneur = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-
+          
           <div>
             <label className="text-xs font-medium text-muted-foreground">
               Full Name
@@ -124,11 +124,7 @@ const SignupEntrepreneur = () => {
             <p className="text-xs text-destructive">{error}</p>
           )}
 
-          <Button
-            type="submit"
-            className="w-full gap-2"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full gap-2" disabled={loading}>
             <UserPlus className="w-4 h-4" />
             {loading ? "Creating..." : "Create Account"}
           </Button>
