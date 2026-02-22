@@ -18,16 +18,20 @@ const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+try {
+  await login(email, password);
 
-    try {
-      await login(email, password);
-      navigate("/marketplace");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (role === "entrepreneur") {
+    navigate("/dashboard/entrepreneur");
+  } else {
+    navigate("/marketplace");
+  }
+
+} catch (err: any) {
+  setError(err.message || "Login failed");
+} finally {
+  setLoading(false);
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
