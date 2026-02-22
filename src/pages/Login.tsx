@@ -21,7 +21,7 @@ const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
 
     try {
       await login(email, password);
-      navigate("/market");
+      navigate("/marketplace");
     } catch (err: any) {
       setError(err.message || "Login failed");
     } finally {
