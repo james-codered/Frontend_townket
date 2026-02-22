@@ -32,7 +32,6 @@ const SignupCustomer = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 gradient-hero">
       <div className="card-soft w-full max-w-sm animate-fade-in">
-        
         {/* Logo */}
         <div className="flex items-center gap-2 mb-6">
           <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
@@ -43,6 +42,7 @@ const SignupCustomer = () => {
           </span>
         </div>
 
+        {/* Badge */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/30 text-xs font-medium mb-4">
           <ShoppingBag className="w-3 h-3" />
           Customer Account
@@ -57,8 +57,7 @@ const SignupCustomer = () => {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          
-          {/* Full Name */}
+          {/* Name */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">
               Full Name
@@ -114,17 +113,12 @@ const SignupCustomer = () => {
             <p className="text-xs text-destructive">{error}</p>
           )}
 
-          <Button
-            type="submit"
-            className="w-full gap-2"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full gap-2" disabled={loading}>
             <UserPlus className="w-4 h-4" />
             {loading ? "Creating..." : "Create Account"}
           </Button>
         </form>
 
-        {/* Bottom Links */}
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link
@@ -136,7 +130,7 @@ const SignupCustomer = () => {
         </p>
 
         <p className="text-center text-xs text-muted-foreground mt-2">
-          Want to sell instead?{" "}
+          Want to sell?{" "}
           <Link
             to="/signup/entrepreneur"
             className="text-foreground font-medium hover:underline"
@@ -144,7 +138,6 @@ const SignupCustomer = () => {
             Sign up as entrepreneur
           </Link>
         </p>
-
       </div>
     </div>
   );
