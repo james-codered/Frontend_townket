@@ -44,42 +44,42 @@ export const AuthProvider = ({
   });
 
   // ================= LOGIN =================
-  const login = useCallback(async (email: string, password: string) => {
-    setState((prev) => ({ ...prev, isLoading: true }));
 
-    try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+const login = useCallback(async (email: string, password: string) => {
+  setState((prev) => ({ ...prev, isLoading: true }));
 
-      const data = await response.json();
+  try {
+    const response = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (!response.ok) {
-        throw new Error(data?.message || "Login failed");
-      }
+    const data = await response.json();
 
-      // ✅ SAVE TO LOCAL STORAGE
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
-
-      setState({
-        user: data.user,
-        token: data.token,
-        isAuthenticated: true,
-        isLoading: false,
-      });
-
-      return data.user;
-    } catch (error: any) {
-      setState((prev) => ({ ...prev, isLoading: false }));
-      throw new Error(error?.message || "Something went wrong");
+    if (!response.ok) {
+      throw new Error(data?.message || "Login failed");
     }
-  }, []);
 
+    // ✅ SAVE TO LOCAL STORAGE
+    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
+
+    setState({
+      user: data.user,
+      token: data.token,
+      isAuthenticated: true,
+      isLoading: false,
+    });
+
+    return data.user; // important
+  } catch (error: any) {
+    setState((prev) => ({ ...prev, isLoading: false }));
+    throw new Error(error?.message || "Something went wrong");
+  }
+}, []);
   // ================= SIGNUP =================
   const signup = useCallback(
     async (
