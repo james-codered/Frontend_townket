@@ -39,7 +39,7 @@ const Navbar = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Icon className="w-7 h-7" />
+              <Icon className="w-14 h-14" />
               {label}
             </Link>
           ))}
