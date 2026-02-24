@@ -8,10 +8,17 @@ const Footer = () => (
           <div className="w-7 h-7 rounded-lg gradient-primary flex items-center justify-center">
             <MapPin className="w-4 h-4 text-primary-foreground" />
           </div>
-          <span className="font-display font-bold text-foreground">Townket</span>
+          <span className="font-display font-bold text-foreground">CampusPreneur</span>
+          <div className="flex items-center">
+  <img
+    src="/logo.png"
+    alt="CampusPreneur"
+    className="h-16 w-auto"
+  />
+</div>
         </div>
         <p className="text-sm text-muted-foreground">
-          Your local marketplace — connecting communities.
+          Your campus marketplace — connecting student entrepreneurs..
         </p>
         <p className="text-xs text-muted-foreground">
           Powered by <span className="font-semibold text-foreground">Maxxedtechltd</span>
