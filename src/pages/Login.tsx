@@ -21,11 +21,13 @@ const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
 try {
   await login(email, password);
 
-  if (role === "entrepreneur") {
-    navigate("/dashboard/entrepreneur");
-  } else {
-    navigate("/marketplace");
-  }
+  const loggedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+if (loggedUser.role === "entrepreneur") {
+  navigate("/dashboard/entrepreneur");
+} else {
+  navigate("/marketplace");
+}
 
 } catch (err: any) {
   setError(err.message || "Login failed");
