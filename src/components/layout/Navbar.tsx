@@ -23,7 +23,7 @@ const Navbar = () => {
           <img
             src="/logo.png"
             alt="CampusPreneur"
-            className="h-42 w-auto scale-100"
+            className="h-24 w-auto scale-100"
           />
         </Link>
 
