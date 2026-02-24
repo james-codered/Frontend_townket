@@ -55,13 +55,14 @@ export const AuthProvider = ({
       if (!response.ok) {
         throw new Error(data?.message || "Login failed");
       }
+   setState({
+  user: data.user,
+  token: data.token,
+  isAuthenticated: true,
+  isLoading: false,
+});
 
-      setState({
-        user: data.user,
-        token: data.token,
-        isAuthenticated: true,
-        isLoading: false,
-      });
+return data.user; // add this line   
     } catch (error: any) {
       setState((prev) => ({ ...prev, isLoading: false }));
       throw new Error(error?.message || "Something went wrong");
