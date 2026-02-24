@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto flex items-center justify-between h-16 px-4">
+      <div className="container mx-auto flex items-center justify-between h-20 px-4">
 
         {/* LOGO */}
         <Link to="/" className="flex items-center">
@@ -39,7 +39,7 @@ const Navbar = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Icon className="w-14 h-14" />
+              <Icon className="w-5 h-5" />
               {label}
             </Link>
           ))}
