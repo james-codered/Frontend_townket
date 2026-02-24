@@ -15,13 +15,13 @@ type AuthState = {
 };
 
 type AuthContextType = AuthState & {
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<any>;
   signup: (
     name: string,
     email: string,
     password: string,
     role: string
-  ) => Promise<void>;
+  ) => Promise<any>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -31,13 +31,19 @@ export const AuthProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [state, setState] = useState<AuthState>({
-    user: null,
-    token: null,
-    isAuthenticated: false,
-    isLoading: false,
+  const [state, setState] = useState<AuthState>(() => {
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
+
+    return {
+      user: storedUser ? JSON.parse(storedUser) : null,
+      token: storedToken,
+      isAuthenticated: !!storedToken,
+      isLoading: false,
+    };
   });
 
+  // ================= LOGIN =================
   const login = useCallback(async (email: string, password: string) => {
     setState((prev) => ({ ...prev, isLoading: true }));
 
@@ -55,20 +61,26 @@ export const AuthProvider = ({
       if (!response.ok) {
         throw new Error(data?.message || "Login failed");
       }
-   setState({
-  user: data.user,
-  token: data.token,
-  isAuthenticated: true,
-  isLoading: false,
-});
 
-return data.user; // add this line   
+      // ✅ SAVE TO LOCAL STORAGE
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+
+      setState({
+        user: data.user,
+        token: data.token,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+
+      return data.user;
     } catch (error: any) {
       setState((prev) => ({ ...prev, isLoading: false }));
       throw new Error(error?.message || "Something went wrong");
     }
   }, []);
 
+  // ================= SIGNUP =================
   const signup = useCallback(
     async (
       name: string,
@@ -98,12 +110,18 @@ return data.user; // add this line
           throw new Error(data?.message || "Signup failed");
         }
 
+        // ✅ SAVE TO LOCAL STORAGE
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+
         setState({
           user: data.user,
           token: data.token,
           isAuthenticated: true,
           isLoading: false,
         });
+
+        return data.user;
       } catch (error: any) {
         setState((prev) => ({ ...prev, isLoading: false }));
         throw new Error(error?.message || "Something went wrong");
