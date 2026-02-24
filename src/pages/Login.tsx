@@ -12,29 +12,28 @@ const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // ✅ added
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-try {
-  await login(email, password);
 
-const loggedUser = await login(email, password);
+    try {
+      const loggedUser = await login(email, password);
 
-if (loggedUser.role === "entrepreneur") {
-  navigate("/dashboard/entrepreneur");
-} else {
-  navigate("/marketplace");
-}
-
-} catch (err: any) {
-  setError(err.message || "Login failed");
-} finally {
-  setLoading(false);
-}
+      if (loggedUser?.role === "entrepreneur") {
+        navigate("/dashboard/entrepreneur");
+      } else {
+        navigate("/marketplace");
+      }
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
@@ -47,7 +46,6 @@ if (loggedUser.role === "entrepreneur") {
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          {/* Email */}
           <div>
             <label className="text-xs font-medium text-muted-foreground">
               Email
@@ -61,7 +59,6 @@ if (loggedUser.role === "entrepreneur") {
             />
           </div>
 
-          {/* Password */}
           <div>
             <div className="flex justify-between items-center">
               <label className="text-xs font-medium text-muted-foreground">
@@ -95,9 +92,7 @@ if (loggedUser.role === "entrepreneur") {
             </div>
           </div>
 
-          {error && (
-            <p className="text-red-500 text-xs">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-xs">{error}</p>}
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
