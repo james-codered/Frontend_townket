@@ -16,14 +16,14 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto flex items-center justify-between h-20 px-4">
+      <div className="container mx-auto flex items-center justify-between h-14 px-4">
 
         {/* LOGO */}
         <Link to="/" className="flex items-center">
           <img
             src="/logo.png"
             alt="CampusPreneur"
-            className="h-16 w-auto"
+            className="h-16 w-auto scale-150"
           />
         </Link>
 
