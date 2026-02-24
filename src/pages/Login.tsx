@@ -21,7 +21,7 @@ const Login = ({ role }: { role: "customer" | "entrepreneur" }) => {
 try {
   await login(email, password);
 
-  const loggedUser = JSON.parse(localStorage.getItem("user") || "{}");
+const loggedUser = await login(email, password);
 
 if (loggedUser.role === "entrepreneur") {
   navigate("/dashboard/entrepreneur");
