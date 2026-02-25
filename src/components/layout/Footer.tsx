@@ -15,7 +15,7 @@ const Footer = () => (
     alt="CampusPreneur"
     className="h-16 w-auto"
   />
-</div>
+</div> 
         </div>
         <p className="text-sm text-muted-foreground">
           Your campus marketplace — connecting student entrepreneurs..
