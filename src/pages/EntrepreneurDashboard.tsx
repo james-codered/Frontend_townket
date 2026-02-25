@@ -20,7 +20,7 @@ const API_URL = "https://townketbackend.onrender.com";
 
 const EntrepreneurDashboard = () => {
   const { token } = useAuth();
-
+  console.log("TOKEN:", token);
   const [profile, setProfile] = useState<BusinessProfile | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
   const [formOpen, setFormOpen] = useState(false);
