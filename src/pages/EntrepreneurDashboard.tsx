@@ -5,7 +5,6 @@ import {
   Plus,
   Store,
   Package,
-  MessageCircle,
   BarChart3,
   Crown,
 } from "lucide-react";
@@ -20,8 +19,10 @@ const API_URL = "https://townketbackend.onrender.com";
 
 const EntrepreneurDashboard = () => {
   const { token } = useAuth();
-  console.log("TOKEN:", token);
-  const [profile, setProfile] = useState<BusinessProfile | null>(null);
+
+  const [profile, setProfile] =
+    useState<BusinessProfile | null | undefined>(undefined);
+
   const [listings, setListings] = useState<Listing[]>([]);
   const [formOpen, setFormOpen] = useState(false);
   const [editingListing, setEditingListing] = useState<Listing | null>(null);
@@ -37,17 +38,24 @@ const EntrepreneurDashboard = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const profileData = await profileRes.json();
-        if (profileRes.ok) setProfile(profileData);
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          setProfile(profileData); // can be null or object
+        } else {
+          setProfile(null);
+        }
 
         const listingsRes = await fetch(`${API_URL}/api/listings/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const listingsData = await listingsRes.json();
-        if (listingsRes.ok) setListings(listingsData);
+        if (listingsRes.ok) {
+          const listingsData = await listingsRes.json();
+          setListings(listingsData);
+        }
       } catch (err) {
         console.error(err);
+        setProfile(null);
       }
     };
 
@@ -66,8 +74,10 @@ const EntrepreneurDashboard = () => {
         body: JSON.stringify(updatedProfile),
       });
 
-      const data = await res.json();
-      if (res.ok) setProfile(data);
+      if (res.ok) {
+        const data = await res.json();
+        setProfile(data);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -87,8 +97,8 @@ const EntrepreneurDashboard = () => {
         body: JSON.stringify(data),
       });
 
-      const newListing = await res.json();
       if (res.ok) {
+        const newListing = await res.json();
         setListings((prev) => [...prev, newListing]);
       }
     } catch (err) {
@@ -109,10 +119,29 @@ const EntrepreneurDashboard = () => {
     }
   };
 
-  if (!profile) {
+  // ================= LOADING STATE =================
+  if (profile === undefined) {
     return <div className="p-10 text-center">Loading dashboard...</div>;
   }
 
+  // ================= NO BUSINESS YET =================
+  if (profile === null) {
+    return (
+      <div className="p-10 text-center">
+        <h2 className="text-xl font-bold mb-4">
+          Create Your Business Profile
+        </h2>
+
+        <ProfileEditor
+          profile={null}
+          onChange={setProfile}
+          onSave={handleSaveProfile}
+        />
+      </div>
+    );
+  }
+
+  // ================= MAIN DASHBOARD =================
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="flex items-center justify-between mb-8">
