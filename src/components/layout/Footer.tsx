@@ -1,4 +1,4 @@
-import { MapPin } from "lucide-react";
+{/*import { MapPin } from "lucide-react";
 
 const Footer = () => (
   <footer className="border-t border-border bg-card mt-auto">
@@ -29,3 +29,4 @@ const Footer = () => (
 );
 
 export default Footer;
+*/}
